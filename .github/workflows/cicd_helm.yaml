@@ -1,0 +1,116 @@
+name: helm deploy
+
+on:
+  push:
+    paths: 
+      - src/**
+    branches:
+      - main
+
+jobs:
+  ci:
+    
+    runs-on: [self-hosted, Windows,x64]
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: shorten commit id
+        shell: cmd
+        run: |
+          wsl echo "COMMIT_ID=${GITHUB_SHA::6}" >> "$GITHUB_ENV"
+      
+      - name: shorten commit id windows
+        shell: cmd
+        run: |
+          echo COMMIT_ID=%GITHUB_SHA:~0,6% >> %GITHUB_ENV%
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }} 
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Debug directory structure
+        shell: cmd
+        run: |
+          echo "Root directory:"
+          dir
+          echo "src directory"
+          dir src\
+          echo "springapi dir"
+          dir src\SpringAPI
+          echo "target dir"
+          dir src\SpringAPI\target
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ben14132/java-app-3:${{ env.COMMIT_ID }} #changed
+
+    outputs: 
+      commit_id: ${{ env.COMMIT_ID }} #changed
+
+  cd:
+    needs: ci
+    runs-on: [self-hosted, Windows,x64]
+    steps:
+      - uses: actions/checkout@v4
+
+      # - name: Modify values file
+      #   shell: cmd
+      #   run: | #changed
+      #     echo ${{needs.ci.outputs.commit_id}}
+      #     pip install yq
+      #     yq -Yi ".image.tag = \"${{needs.ci.outputs.commit_id}}\"" charts/java-app-3/values-dev.yaml
+      
+
+      # - name: Commit changes
+      #   uses: EndBug/add-and-commit@v9
+      #   with: 
+      #     message: 'Updates values.yaml with commit ${{needs.ci.outputs.commit_id}}'
+
+      - name: Deploy with helm 
+        shell: cmd
+        run: |
+          wsl helm upgrade --install java-app ./charts/java-app-3 -n java --create-namespace --set image.tag=${{needs.ci.outputs.commit_id}}
+
+
+    # outputs: 
+    #   commit_id: 
+  # cd:
+  #   needs: ci
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: actions/checkout@v3
+      
+  #     - name: Modify values file
+  #       shell: bash
+  #       run: |
+  #         echo 
+  #         pip install yq
+  #         yq -Yi '.image.tag = ""' charts/python-app/values.yaml
+
+  #     - name: Commit changes
+  #       uses: EndBug/add-and-commit@v9
+  #       with: 
+  #         message: 'Updates values.yaml with commit '
+
+  #     - name: Install argocd
+  #       shell: bash
+  #       run: |
+  #         curl -ksSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+  #         chmod +x argocd
+  #         sudo mv ./argocd /usr/local/bin/argocd
+  #         export PATH=$PATH:/usr/local/bin
+
+  #     - name: Argocd app sync
+  #       shell: bash
+  #       run: |
+  #         argocd login argocd-server.argocd \
+  #         --insecure \
+  #         --grpc-web \
+  #         --username admin \
+  #         --password   
+  #         argocd app sync python-app
