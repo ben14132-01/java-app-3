@@ -7,6 +7,8 @@ metadata:
     github.com/project-slug: ben14132-01/java-app-3
     backstage.io/techdocs-ref: dir:.
     'jenkins.io/job-full-name': java/java-app-3
+    prometheus.io/rule: spring-app-alerts
+    prometheus.io/alert: SpringAppDown
 spec:
   type: service
   owner: development
