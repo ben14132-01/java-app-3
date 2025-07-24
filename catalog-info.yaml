@@ -9,7 +9,7 @@ metadata:
     'jenkins.io/job-full-name': java/java-app-3
     prometheus.io/rule: spring-app-rules
     prometheus.io/alert: SpringAppDown
-    grafana/dashboard-selector: backstage
+    grafana/dashboard-selector: Spring Boot 2.1 Statistics
 spec:
   type: service
   owner: development
