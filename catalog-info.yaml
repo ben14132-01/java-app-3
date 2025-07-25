@@ -10,6 +10,7 @@ metadata:
     prometheus.io/rule: spring-app-rules
     prometheus.io/alert: SpringAppDown
     grafana/dashboard-selector: "tags @> 'backstage' && tags @> 'monitoring'"
+    grafana/overview-dashboard: 'http://localhost:37025/d/spring_boot_21/spring-boot-2-1-statistics?orgId=1&from=now-1h&to=now&timezone=browser&var-application=&var-instance=10.244.0.145:8081&var-hikaricp=&var-memory_pool_heap=$__all&var-memory_pool_nonheap=$__all'
 spec:
   type: service
   owner: development
