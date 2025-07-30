@@ -7,7 +7,7 @@ metadata:
     github.com/project-slug: ben14132-01/java-app-3
     backstage.io/techdocs-ref: dir:.
     'jenkins.io/job-full-name': java/java-app-3
-    prometheus.io/rule: spring-app-recording-rules
+    prometheus.io/rule: SpringAppUp
     prometheus.io/alert: SpringAppUp
     grafana/dashboard-selector: "tags @> 'backstage' && tags @> 'monitoring'"
     grafana/overview-dashboard: 'http://host.docker.internal:8085/d/spring_boot_21/spring-boot-2-1-statistics'
