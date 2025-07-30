@@ -10,7 +10,7 @@ metadata:
     prometheus.io/rule: spring-app-rules
     prometheus.io/alert: SpringAppDown
     grafana/dashboard-selector: "tags @> 'backstage' && tags @> 'monitoring'"
-    grafana/overview-dashboard: 'http://host.docker.internal:8085/d/spring_boot_21/spring-boot-2-1-statistics?orgId=1&kiosk'
+    grafana/overview-dashboard: 'http://host.docker.internal:8085/d/spring_boot_21/spring-boot-2-1-statistics'
 spec:
   type: service
   owner: development
