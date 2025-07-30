@@ -8,7 +8,7 @@ metadata:
     backstage.io/techdocs-ref: dir:.
     'jenkins.io/job-full-name': java/java-app-3
     prometheus.io/rule: spring-app-rules
-    prometheus.io/alert: SpringAppDown
+    prometheus.io/alert: SpringAppUp
     grafana/dashboard-selector: "tags @> 'backstage' && tags @> 'monitoring'"
     grafana/overview-dashboard: 'http://host.docker.internal:8085/d/spring_boot_21/spring-boot-2-1-statistics'
 spec:
